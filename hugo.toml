@@ -1,0 +1,36 @@
+baseURL = "https://cedricbartolacelli.ch/"
+theme = "hugo-noir"
+
+defaultContentLanguage = "fr"
+defaultContentLanguageInSubdir = false   # adresses sans /fr/
+
+[languages]
+  [languages.fr]
+    label = "Français"
+    title = "Cédric Bartolacelli"
+    weight = 1
+    contentDir = "content/fr"
+    [languages.fr.menu]
+      [[languages.fr.menu.main]]
+        name = "Accueil"
+        pageRef = "/"
+        weight = 1
+      [[languages.fr.menu.main]]
+        name = "Projets"
+        pageRef = "/projects"
+        weight = 2
+      [[languages.fr.menu.main]]
+        name = "À propos"
+        pageRef = "/about"
+        weight = 3
+      [[languages.fr.menu.main]]
+        name = "Portfolio PDF"
+        url = "/portfolio.pdf"
+        weight = 4
+
+[params]
+  name = "Cédric Bartolacelli"
+  location = "Lausanne"
+  description = "Ingénieur des médias"
+  linkedin = "https://linkedin.com/in/cédric-bartolacelli"
+  email = "barto.cedric@gmail.com"
