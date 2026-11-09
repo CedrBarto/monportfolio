@@ -12,21 +12,9 @@ defaultContentLanguageInSubdir = false   # adresses sans /fr/
     contentDir = "content/fr"
     [languages.fr.menu]
       [[languages.fr.menu.main]]
-        name = "Accueil"
-        pageRef = "/"
-        weight = 1
-      [[languages.fr.menu.main]]
         name = "Projets"
         pageRef = "/projects"
-        weight = 2
-      [[languages.fr.menu.main]]
-        name = "À propos"
-        pageRef = "/about"
-        weight = 3
-      [[languages.fr.menu.main]]
-        name = "Portfolio PDF"
-        url = "/portfolio.pdf"
-        weight = 4
+        weight = 1
 
 [params]
   name = "Cédric Bartolacelli"

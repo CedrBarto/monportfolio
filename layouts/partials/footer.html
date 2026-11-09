@@ -1,0 +1,33 @@
+<!-- Footer -->
+<footer class="mt-32 text-center">
+  <div class="max-w-3xl mx-auto">
+    <div class="border-t border-border-primary-light dark:border-border-primary-dark pt-5">
+      <div class="flex flex-col items-center justify-center gap-2">
+        {{ $authorData := index hugo.Data .Language.Lang "author" }}
+        {{ $author := cond (and $authorData $authorData.author) $authorData.author site.Params }}
+        {{ with $author }}
+        <p class="text-text-secondary-light dark:text-text-secondary-dark text-xm pb-12">© {{ now.Format "2006" }} {{ .name }} · Réalisé avec <a href="https://gohugo.io/" target="_blank" rel="noopener" class="animated-link hover:opacity-70 transition-opacity duration-200">HUGO</a></p>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+.animated-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.animated-link:hover::after {
+  width: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+}
+body > main {
+  flex: 1 0 auto;
+}
+</style>
