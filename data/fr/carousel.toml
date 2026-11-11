@@ -1,0 +1,11 @@
+items = [
+  { svg = "https://api.iconify.design/mdi/roller-skate.svg"},
+  { svg = "https://api.iconify.design/jam/dj-f.svg"},
+  { svg = "https://api.iconify.design/pinhead/vinyl-record.svg"},
+  { svg = "https://api.iconify.design/streamline-ultimate/night-club-disco-ball-bold.svg"},
+  { svg = "https://api.iconify.design/boxicons/popcorn-filled.svg"},
+  { svg = "https://api.iconify.design/icon-park-solid/trousers-bell-bottoms.svg"},
+  { svg = "https://api.iconify.design/pinhead/ice-skate.svg"},
+  { svg = "https://api.iconify.design/ph/person-simple-ski-fill.svg"},
+  { svg = "https://api.iconify.design/fa6-solid/volleyball.svg"},
+]

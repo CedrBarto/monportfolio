@@ -6,7 +6,7 @@
         {{ $authorData := index hugo.Data .Language.Lang "author" }}
         {{ $author := cond (and $authorData $authorData.author) $authorData.author site.Params }}
         {{ with $author }}
-        <p class="text-text-secondary-light dark:text-text-secondary-dark text-xm pb-12">© {{ now.Format "2006" }} {{ .name }} · Réalisé avec <a href="https://gohugo.io/" target="_blank" rel="noopener" class="animated-link hover:opacity-70 transition-opacity duration-200">HUGO</a></p>
+        <p class="text-text-secondary-light dark:text-text-secondary-dark text-xm pb-12">© {{ now.Format "2006" }} {{ .name }} · Réalisé par moi avec <a href="https://gohugo.io/" target="_blank" rel="noopener" class="animated-link hover:opacity-70 transition-opacity duration-200">HUGO</a></p>
         {{ end }}
       </div>
     </div>

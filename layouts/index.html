@@ -4,7 +4,7 @@
     {{ $author := cond (and $authorData $authorData.author) $authorData.author site.Params }}
 
     {{ with $author }}
-    <section class="mb-16">
+    <section class="mb-8">
         <div class="max-w-3xl ml-0 p-4 pb-2 border border-border-primary-light dark:border-border-primary-dark rounded-lg bg-bg-primary-light dark:bg-bg-secondary-dark shadow-lg relative">
             <div class="text-left">
                 <h1 class="text-4xl font-bold mb-2 text-text-primary-light dark:text-text-primary-dark">{{ .name }}</h1>
@@ -29,9 +29,118 @@
         </div>
     </section>
     {{ end }}
+
+        <!-- Carrousel : passions -->
+    {{ with index hugo.Data .Language.Lang "carousel" }}
+    {{ with .items }}
+    {{ $items := . }}
+    <section class="mt-4 mb-8 max-w-3xl" aria-label="centres d'intérêt">
+        <div class="ic-carousel">
+            <div class="ic-track">
+                {{ range $copie := seq 2 }}
+                {{ range $items }}
+                <div class="ic-item"{{ if eq $copie 2 }} aria-hidden="true"{{ end }}>
+                    {{ if .svg }}<img class="ic-svg" src="{{ .svg | relURL }}" alt="">{{ else }}<i class="{{ .icon }}"></i>{{ end }}
+                    <span>{{ .name }}</span>
+                </div>
+                {{ end }}
+                {{ end }}
+            </div>
+        </div>
+    </section>
+    {{ end }}
+    {{ end }}
+
+    <!-- Cadre About et Projets -->
+    <section class="max-w-3xl ml-0 grid grid-cols-1 md:grid-cols-2 gap-6">
+             <div class="home-card bio-card p-6 border border-border-primary-light dark:border-border-primary-dark rounded-lg bg-bg-primary-light dark:bg-bg-secondary-dark shadow-lg">
+            {{ with site.GetPage "/about" }}
+            <div class="bio-text text-text-secondary-light dark:text-text-secondary-dark">
+                {{ .Content }}
+            </div>
+            {{ end }}
+        </div>
+        <a href="{{ "projects/" | relLangURL }}" class="home-card p-6 flex items-start border border-border-primary-light dark:border-border-primary-dark rounded-lg bg-bg-primary-light dark:bg-bg-secondary-dark shadow-lg hover:-translate-y-1 transition-transform duration-200">
+            <h2 class="text-4xl font-bold text-text-primary-light dark:text-text-primary-dark">Projets</h2>
+        </a>
+    </section>
 </div>
 
 <style>
 .max-w-3xl { border-color: rgba(75, 85, 99, 0.7); }
+.home-card {
+    height: 30rem;
+    border-color: rgba(75, 85, 99, 0.7);
+}
+.bio-card {
+    height: auto;
+    min-height: 30rem;
+}
+.bio-text {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+.bio-text p {
+    margin: 0;
+}
+.bio-text p + p {
+    margin-top: 0.75rem;
+}
+.bio-text strong {
+    color: #111827;
+    font-weight: 800;
+}
+.text-4xl {
+    font-weight:700;
+}
+
+html.dark .bio-text strong {
+    color: #f3f4f6;
+}
+.ic-carousel {
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+.ic-track {
+    display: flex;
+    width: max-content;
+    animation: ic-scroll 40s linear infinite;
+}
+.ic-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    white-space: nowrap;
+}
+.ic-item i {
+    font-size: 2rem;
+}
+.ic-item span {
+    font-size: 1.125rem;
+    font-weight: 500;
+}
+.ic-svg {
+    width: 2rem;
+    height: 2rem;
+    object-fit: contain;
+    filter: brightness(0);
+}
+html.dark .ic-svg {
+    filter: brightness(0) invert(1);
+}
+@keyframes ic-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .ic-track { animation: none; }
+}
+@media (min-width: 494px) and (max-width: 767px) {
+    .bio-card {
+        min-height: 0;
+    }
+}
 </style>
 {{ end }}

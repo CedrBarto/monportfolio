@@ -81,10 +81,12 @@
         
 <head>
     <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Geist', sans-serif;
         }
         .language-switcher {
             position: relative;
@@ -142,7 +144,7 @@
                 
                 
                 
-                <a href="http://localhost:1313/" class="text-xl font-bold text-text-primary-light dark:text-text-primary-dark hover:text-accent-light dark:hover:text-accent-dark transition-colors duration-300">Accueil
+                <a href="http://localhost:1313/" class="text-xl font-bold text-text-primary-light dark:text-text-primary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300">Accueil
                 </a>
                 
                 
@@ -160,14 +162,13 @@
             </nav>
             <div class="hidden md:flex justify-end items-center">
                 <div class="flex items-center">
-                    <span class="text-lg text-text-secondary-light dark:text-text-secondary-dark mr-2">Heure Locale:</span>
                     <div id="local-time" class="text-lg text-text-secondary-light dark:text-text-secondary-dark"></div>
                 </div>
                 <button id="theme-toggle-button-desktop" class="ml-4 inline-block text-lg text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300 p-2 rounded-md">
-                  <svg id="theme-toggle-dark-icon-desktop" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
+                  <svg id="theme-toggle-dark-icon-desktop" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden">
                     <path d="M21.7519 15.0021C20.597 15.484 19.3296 15.7501 18 15.7501C12.6152 15.7501 8.25 11.3849 8.25 6.00011C8.25 4.67052 8.51614 3.40308 8.99806 2.24817C5.47566 3.71798 3 7.19493 3 11.2501C3 16.6349 7.36522 21.0001 12.75 21.0001C16.8052 21.0001 20.2821 18.5245 21.7519 15.0021Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
-                  <svg id="theme-toggle-light-icon-desktop" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="w-5 h-5 hidden">
+                  <svg id="theme-toggle-light-icon-desktop" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/>
                   </svg>
                 </button>
@@ -182,10 +183,10 @@
                 <span class="text-xl font-bold text-text-primary-light dark:text-text-primary-dark">Menu</span>
                 <div class="flex items-center gap-4">
                     <button id="theme-toggle-button-mobile" class="text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300 flex items-center p-2 rounded-md">
-                      <svg id="theme-toggle-dark-icon-mobile" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
+                      <svg id="theme-toggle-dark-icon-mobile" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hidden">
                         <path d="M21.7519 15.0021C20.597 15.484 19.3296 15.7501 18 15.7501C12.6152 15.7501 8.25 11.3849 8.25 6.00011C8.25 4.67052 8.51614 3.40308 8.99806 2.24817C5.47566 3.71798 3 7.19493 3 11.2501C3 16.6349 7.36522 21.0001 12.75 21.0001C16.8052 21.0001 20.2821 18.5245 21.7519 15.0021Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
-                      <svg id="theme-toggle-light-icon-mobile" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="w-5 h-5 hidden">
+                      <svg id="theme-toggle-light-icon-mobile" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="w-5 h-5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/>
                       </svg>
                     </button>
@@ -203,7 +204,6 @@
             </nav>
             <div class="mt-auto p-6">
                 <div class="flex items-center justify-center">
-                    <span class="text-lg text-text-secondary-light dark:text-text-secondary-dark mr-2">Heure Locale:</span>
                     <div id="mobile-local-time" class="text-lg text-text-secondary-light dark:text-text-secondary-dark"></div>
                 </div>
             </div>
@@ -213,14 +213,15 @@
 
 <script>
     
-    function updateLocalTime() {
-        const timeElements = document.querySelectorAll('#local-time, #mobile-local-time');
-        timeElements.forEach(element => {
-            if (element) {
-                const now = new Date();
-                const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                element.textContent = timeString;
-            }
+       function updateLocalTime() {
+        const now = new Date();
+        const jour  = now.toLocaleDateString('fr-CH', { weekday: 'long' });
+        const mois  = now.toLocaleDateString('fr-CH', { month: 'short' });
+        const heure = now.toLocaleTimeString('fr-CH', { hour: '2-digit', minute: '2-digit' });
+        const texte = jour + ' ' + now.getDate() + ' ' + mois + ' ' + heure;
+
+        document.querySelectorAll('#local-time, #mobile-local-time').forEach(function (element) {
+            element.textContent = texte;
         });
     }
     updateLocalTime();
@@ -263,20 +264,20 @@
     function updateIcons(isDarkMode) {
         if (themeToggleDarkIconDesktop && themeToggleLightIconDesktop) {
             if (isDarkMode) {
-                themeToggleLightIconDesktop.classList.remove('hidden');
-                themeToggleDarkIconDesktop.classList.add('hidden');
-            } else {
-                themeToggleLightIconDesktop.classList.add('hidden');
                 themeToggleDarkIconDesktop.classList.remove('hidden');
+                themeToggleLightIconDesktop.classList.add('hidden');
+            } else {
+                themeToggleDarkIconDesktop.classList.add('hidden');
+                themeToggleLightIconDesktop.classList.remove('hidden');
             }
         }
         if (themeToggleDarkIconMobile && themeToggleLightIconMobile) {
             if (isDarkMode) {
-                themeToggleLightIconMobile.classList.remove('hidden');
-                themeToggleDarkIconMobile.classList.add('hidden');
-            } else {
-                themeToggleLightIconMobile.classList.add('hidden');
                 themeToggleDarkIconMobile.classList.remove('hidden');
+                themeToggleLightIconMobile.classList.add('hidden');
+            } else {
+                themeToggleDarkIconMobile.classList.add('hidden');
+                themeToggleLightIconMobile.classList.remove('hidden');
             }
         }
     }
@@ -356,7 +357,7 @@
         
         
         
-        <p class="text-text-secondary-light dark:text-text-secondary-dark text-xm pb-12">© 2026 Cédric Bartolacelli · Réalisé avec <a href="https://gohugo.io/" target="_blank" rel="noopener" class="animated-link text-accent-light dark:text-accent-dark hover:text-text-primary-light dark:hover:text-text-primary-dark">Hugo</a></p>
+        <p class="text-text-secondary-light dark:text-text-secondary-dark text-xm pb-12">© 2026 Cédric Bartolacelli · Réalisé par moi avec <a href="https://gohugo.io/" target="_blank" rel="noopener" class="animated-link hover:opacity-70 transition-opacity duration-200">HUGO</a></p>
         
       </div>
     </div>
@@ -369,21 +370,9 @@
   display: inline-flex;
   align-items: center;
 }
-.animated-link::after {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 1px;
-  bottom: -1px;
-  left: 0;
-  background-color: #0284c7;
-  transition: width 0.3s ease-in-out;
-}
+
 .animated-link:hover::after {
   width: 100%;
-}
-html.dark .animated-link::after {
-  background-color: #0ea5e9;
 }
 body {
   display: flex;
