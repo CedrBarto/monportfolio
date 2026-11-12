@@ -1,47 +1,41 @@
 {{ define "main" }}
-<div class="w-full md:w-4/5 lg:w-3/5 mx-auto px-14 py-12">
-    {{ $authorData := index hugo.Data .Language.Lang "author" }}
-    {{ $author := cond (and $authorData $authorData.author) $authorData.author site.Params }}
+{{ $authorData := index hugo.Data .Language.Lang "author" }}
+{{ $author := cond (and $authorData $authorData.author) $authorData.author site.Params }}
 
-    {{ with $author }}
-    <section class="mb-8">
-        <div class="max-w-3xl ml-0 p-4 pb-2 border border-border-primary-light dark:border-border-primary-dark rounded-lg bg-bg-primary-light dark:bg-bg-secondary-dark shadow-lg relative">
-            <div class="text-left">
-                <h1 class="text-4xl font-bold mb-2 text-text-primary-light dark:text-text-primary-dark">{{ .name }}</h1>
-                <p class="text-xl mb-3 text-text-primary-light dark:text-text-primary-dark">{{ .description }}</p>
-                <p class="text-gray-400 mb-6 flex items-center text-xl">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-400" width="24" height="24" viewBox="-7 -2 24 24"><path fill="currentColor" d="M4 9.9A5.002 5.002 0 0 1 5 0a5 5 0 0 1 1 9.9V19a1 1 0 0 1-2 0V9.9zM5 8a3 3 0 1 0 0-6a3 3 0 0 0 0 6z"/></svg>
-                    {{ .location }}
-                </p>
-            </div>
-            <div class="mt-8 md:mt-0 flex flex-wrap justify-center gap-3 md:absolute md:top-4 md:right-4 md:flex-nowrap md:justify-end md:mt-0">
-                {{ with .email }}
-                <a href="mailto:{{ . }}" aria-label="E-mail" class="text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark bg-bg-primary-light dark:bg-bg-secondary-dark p-2 rounded-md border border-border-primary-light dark:border-border-primary-dark">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M2 3.5h12a.5.5 0 0 1 .5.5v.572L8 8.286L1.5 4.572V4a.5.5 0 0 1 .5-.5Zm-.5 2.8V12a.5.5 0 0 0 .5.5h12a.5.5 0 0 0 .5-.5V6.3L8.372 9.8L8 10.014L7.628 9.8L1.5 6.3ZM0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Z" clip-rule="evenodd"/></svg>
+<div class="page-wrap w-full mx-auto py-12">
+<div class="home">
+
+    <!-- 1. Présentation -->
+    <section class="intro">
+        <div class="intro-head">
+            <h1 class="intro-name">{{ $author.name }}</h1>
+            <div class="intro-links">
+                {{ with $author.email }}
+                <a href="mailto:{{ . }}" class="icon-link" aria-label="E-mail">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
                 </a>
                 {{ end }}
-                {{ with .linkedin }}
-                <a href="{{ . }}" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer" class="text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark bg-bg-primary-light dark:bg-bg-secondary-dark p-2 rounded-md border border-border-primary-light dark:border-border-primary-dark">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20.47 2H3.53a1.45 1.45 0 0 0-1.47 1.43v17.14A1.45 1.45 0 0 0 3.53 22h16.94a1.45 1.45 0 0 0 1.47-1.43V3.43A1.45 1.45 0 0 0 20.47 2ZM8.09 18.74h-3v-9h3ZM6.59 8.48a1.56 1.56 0 1 1 0-3.12a1.57 1.57 0 1 1 0 3.12Zm12.32 10.26h-3v-4.83c0-1.21-.43-2-1.52-2A1.65 1.65 0 0 0 12.85 13a2 2 0 0 0-.1.73v5h-3v-9h3V11a3 3 0 0 1 2.71-1.5c2 0 3.45 1.29 3.45 4.06Z"/></svg>
+                {{ with $author.linkedin }}
+                <a href="{{ . }}" class="icon-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M20.47 2H3.53a1.45 1.45 0 0 0-1.47 1.43v17.14A1.45 1.45 0 0 0 3.53 22h16.94a1.45 1.45 0 0 0 1.47-1.43V3.43A1.45 1.45 0 0 0 20.47 2ZM8.09 18.74h-3v-9h3ZM6.59 8.48a1.56 1.56 0 1 1 0-3.12a1.57 1.57 0 1 1 0 3.12Zm12.32 10.26h-3v-4.83c0-1.21-.43-2-1.52-2A1.65 1.65 0 0 0 12.85 13a2 2 0 0 0-.1.73v5h-3v-9h3V11a3 3 0 0 1 2.71-1.5c2 0 3.45 1.29 3.45 4.06Z"/></svg>
                 </a>
                 {{ end }}
             </div>
         </div>
+        {{ with $author.description }}<p class="intro-bio">{{ . }}</p>{{ end }}
     </section>
-    {{ end }}
 
-        <!-- Carrousel : passions -->
+    <!-- 2. Bandeau passions (défilement continu) -->
     {{ with index hugo.Data .Language.Lang "carousel" }}
     {{ with .items }}
     {{ $items := . }}
-    <section class="mt-4 mb-8 max-w-3xl" aria-label="centres d'intérêt">
+    <section class="band" aria-label="Centres d'intérêt">
         <div class="ic-carousel">
             <div class="ic-track">
                 {{ range $copie := seq 2 }}
                 {{ range $items }}
-                <div class="ic-item"{{ if eq $copie 2 }} aria-hidden="true"{{ end }}>
-                    {{ if .svg }}<img class="ic-svg" src="{{ .svg | relURL }}" alt="">{{ else }}<i class="{{ .icon }}"></i>{{ end }}
-                    <span>{{ .name }}</span>
+                <div class="ic-item" title="{{ .name }}"{{ if eq $copie 2 }} aria-hidden="true"{{ end }}>
+                    {{ if .svg }}<img class="ic-svg" src="{{ .svg | relURL }}" alt="{{ .name }}">{{ else }}<i class="{{ .icon }}"></i>{{ end }}
                 </div>
                 {{ end }}
                 {{ end }}
@@ -51,96 +45,139 @@
     {{ end }}
     {{ end }}
 
-    <!-- Cadre About et Projets -->
-    <section class="max-w-3xl ml-0 grid grid-cols-1 md:grid-cols-2 gap-6">
-             <div class="home-card bio-card p-6 border border-border-primary-light dark:border-border-primary-dark rounded-lg bg-bg-primary-light dark:bg-bg-secondary-dark shadow-lg">
-            {{ with site.GetPage "/about" }}
-            <div class="bio-text text-text-secondary-light dark:text-text-secondary-dark">
-                {{ .Content }}
-            </div>
+    <!-- 3. Projets : 1 carte verticale + 2 horizontales -->
+    {{ $projets := where site.RegularPages "Section" "projects" }}
+    {{ $selection := where $projets "Params.featured" true }}
+    {{ if not $selection }}{{ $selection = $projets }}{{ end }}
+    <section class="work">
+        <h2 class="work-title">Projets</h2>
+        {{ with first 3 $selection.ByDate.Reverse }}
+        <div class="p-grid p-count-{{ len . }}">
+            {{ range . }}
+            <article class="p-card bg-bg-primary-light dark:bg-bg-primary-dark">
+                <span class="p-name">{{ .Title }}</span>
+                <span class="p-media">
+                    {{ with .Params.image }}<img src="{{ . | relURL }}" alt="" loading="lazy">{{ end }}
+                </span>
+                <a href="{{ .RelPermalink }}" class="p-go" aria-label="Voir le projet {{ .Title }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+                </a>
+            </article>
             {{ end }}
         </div>
-        <a href="{{ "projects/" | relLangURL }}" class="home-card p-6 flex items-start border border-border-primary-light dark:border-border-primary-dark rounded-lg bg-bg-primary-light dark:bg-bg-secondary-dark shadow-lg hover:-translate-y-1 transition-transform duration-200">
-            <h2 class="text-4xl font-bold text-text-primary-light dark:text-text-primary-dark">Projets</h2>
-        </a>
+        {{ else }}
+        <p class="muted">Les projets arrivent bientôt.</p>
+        {{ end }}
+        <p class="work-all"><a href="{{ "projects/" | relLangURL }}">Tout voir →</a></p>
     </section>
+
+</div>
 </div>
 
 <style>
-.max-w-3xl { border-color: rgba(75, 85, 99, 0.7); }
-.home-card {
-    height: 30rem;
-    border-color: rgba(75, 85, 99, 0.7);
+:root {
+    --muted: #6b7280;
+    --line: rgba(75, 85, 99, 0.15);
+    --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
-.bio-card {
-    height: auto;
-    min-height: 30rem;
-}
-.bio-text {
-    min-width: 0;
-    overflow-wrap: anywhere;
-}
-.bio-text p {
-    margin: 0;
-}
-.bio-text p + p {
-    margin-top: 0.75rem;
-}
-.bio-text strong {
-    color: #111827;
-    font-weight: 800;
-}
-.text-4xl {
-    font-weight:700;
+html.dark {
+    --muted: #9ca3af;
+    --line: rgba(156, 163, 175, 0.2);
 }
 
-html.dark .bio-text strong {
-    color: #f3f4f6;
-}
-.ic-carousel {
-    overflow: hidden;
-    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-}
-.ic-track {
-    display: flex;
-    width: max-content;
-    animation: ic-scroll 40s linear infinite;
-}
-.ic-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1rem;
-    white-space: nowrap;
-}
-.ic-item i {
-    font-size: 2rem;
-}
-.ic-item span {
-    font-size: 1.125rem;
-    font-weight: 500;
-}
-.ic-svg {
-    width: 2rem;
-    height: 2rem;
-    object-fit: contain;
-    filter: brightness(0);
-}
-html.dark .ic-svg {
-    filter: brightness(0) invert(1);
-}
-@keyframes ic-scroll {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-}
-@media (prefers-reduced-motion: reduce) {
-    .ic-track { animation: none; }
-}
-@media (min-width: 494px) and (max-width: 767px) {
-    .bio-card {
-        min-height: 0;
+/* Mise en page */
+.page-wrap { padding-left: 1.25rem; padding-right: 1.25rem; }
+@media (min-width: 768px) {
+    .page-wrap {
+        max-width: 55rem;
+        padding-left: 3.5rem;
+        padding-right: 3.5rem;
     }
 }
+.home { max-width: 48rem; font-family: var(--mono); }
+.muted { color: var(--muted); }
+
+/* 1. Présentation */
+.intro { margin: 2rem 0 2.5rem; }
+.intro-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+.intro-name { font-size: clamp(1.75rem, 6vw, 2.5rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; }
+.intro-links { display: flex; gap: 0.5rem; }
+.icon-link { display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; border: 1px solid rgba(75, 85, 99, 0.3); border-radius: 0.45rem; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06); color: inherit; }
+.icon-link:hover { border-color: currentColor; }
+.intro-bio { margin-top: 1.25rem; font-size: 1rem; line-height: 1.6; color: var(--muted); }
+@media (min-width: 768px) { .intro-bio { font-size: 1.05rem; } }
+
+/* 2. Bandeau passions */
+.band { margin-bottom: 2.5rem; padding-top: 0.75rem; }
+.ic-carousel { overflow: hidden; mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent); }
+.ic-track { display: flex; width: max-content; animation: ic-scroll 40s linear infinite; }
+.ic-item { display: flex; align-items: center; padding: 0.5rem 1.25rem; }
+.ic-item i { font-size: 1.75rem; }
+.ic-svg { width: 1.75rem; height: 1.75rem; object-fit: contain; filter: brightness(0); }
+html.dark .ic-svg { filter: brightness(0) invert(1); }
+@keyframes ic-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .ic-track { animation: none; } }
+
+/* 3. Projets */
+.work-title { font-size: 1.75rem; font-weight: 700; margin-bottom: 1.25rem; }
+
+/* La carte : cadre noir simple */
+.p-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem;
+    border: 1px solid #111;
+    border-radius: 0.6rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    color: inherit;
+    text-decoration: none;
+}
+html.dark .p-card { border-color: #e5e5e5; }
+.p-name { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.6rem; }
+.p-media { position: relative; flex: 1; min-height: 0; border-radius: 0.4rem; overflow: hidden; }
+.p-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.p-go {
+    position: absolute;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.4rem;
+    background: #111;
+    color: #fff;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+html.dark .p-go { background: #f5f5f5; color: #111; }
+.p-go:hover { background: #fff; color: #111; }
+html.dark .p-go:hover { background: #111; color: #fff; }
+
+/* Disposition mobile : cartes empilées, la 1re verticale, les autres horizontales */
+.p-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+.p-card { aspect-ratio: 16 / 10; }
+.p-card:first-child { aspect-ratio: 4 / 5; }
+
+/* Disposition ordinateur : 1 verticale à gauche, 2 horizontales empilées à droite */
+@media (min-width: 768px) {
+    .p-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 13rem 13rem; gap: 2rem; }
+    .p-card, .p-card:first-child { aspect-ratio: auto; }
+    .p-card:nth-child(1) { grid-column: 1; grid-row: 1 / span 2; }
+    .p-card:nth-child(2) { grid-column: 2; grid-row: 1; }
+    .p-card:nth-child(3) { grid-column: 2; grid-row: 2; }
+
+    /* Avec 2 projets : deux cartes verticales côte à côte */
+    .p-count-2 .p-card:nth-child(2) { grid-row: 1 / span 2; }
+
+    /* Avec 1 projet : une grande carte pleine largeur */
+    .p-count-1 { grid-template-columns: 1fr; grid-template-rows: 22rem; }
+    .p-count-1 .p-card:nth-child(1) { grid-row: 1; }
+}
+
+.work-all { margin-top: 1.25rem; text-align: right; font-size: 0.9rem; font-weight: 700; }
+.work-all a { color: var(--muted); }
+.work-all a:hover { color: inherit;}
 </style>
 {{ end }}
