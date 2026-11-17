@@ -34,9 +34,9 @@
             <div class="ic-track">
                 {{ range $copie := seq 2 }}
                 {{ range $items }}
-                <div class="ic-item" title="{{ .name }}"{{ if eq $copie 2 }} aria-hidden="true"{{ end }}>
-                    {{ if .svg }}<img class="ic-svg" src="{{ .svg | relURL }}" alt="{{ .name }}">{{ else }}<i class="{{ .icon }}"></i>{{ end }}
-                </div>
+                <button type="button" class="ic-item" data-anim="{{ .anim | default "pulse" }}"{{ with .name }} title="{{ . }}" aria-label="{{ . }}"{{ end }}{{ if eq $copie 2 }} aria-hidden="true" tabindex="-1"{{ end }}>
+                    <span class="ic-icon">{{ if .file }}{{ with resources.Get .file }}{{ .Content | replaceRE "(?s)<metadata>.*?</metadata>" "" | safeHTML }}{{ end }}{{ else if .svg }}<img class="ic-svg" src="{{ .svg | relURL }}" alt="">{{ else }}<i class="{{ .icon }}"></i>{{ end }}</span>
+                </button>
                 {{ end }}
                 {{ end }}
             </div>
@@ -50,7 +50,7 @@
     {{ $selection := where $projets "Params.featured" true }}
     {{ if not $selection }}{{ $selection = $projets }}{{ end }}
     <section class="work">
-        <h2 class="work-title">Projets</h2>
+        <h2 class="work-title">Quelques projets</h2>
         {{ with first 3 $selection.ByDate.Reverse }}
         <div class="p-grid p-count-{{ len . }}">
             {{ range . }}
@@ -108,15 +108,76 @@ html.dark {
 @media (min-width: 768px) { .intro-bio { font-size: 1.05rem; } }
 
 /* 2. Bandeau passions */
-.band { margin-bottom: 2.5rem; padding-top: 0.75rem; }
+.band { margin-bottom: 2rem; }
 .ic-carousel { overflow: hidden; mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent); }
 .ic-track { display: flex; width: max-content; animation: ic-scroll 40s linear infinite; }
-.ic-item { display: flex; align-items: center; padding: 0.5rem 1.25rem; }
+.ic-item { display: flex; align-items: center; padding: 1rem 1.25rem; background: none; border: 0; color: inherit; cursor: pointer; }
+.ic-item:focus-visible { outline: 2px solid currentColor; outline-offset: -4px; border-radius: 0.5rem; }
 .ic-item i { font-size: 1.75rem; }
 .ic-svg { width: 1.75rem; height: 1.75rem; object-fit: contain; filter: brightness(0); }
 html.dark .ic-svg { filter: brightness(0) invert(1); }
 @keyframes ic-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) { .ic-track { animation: none; } }
+
+/* Icônes intégrées (SVG en ligne) */
+.ic-icon { display: inline-flex; }
+.ic-icon svg { display: block; width: 1.75rem; height: 1.75rem; overflow: visible; }
+.ic-icon svg * { transform-box: fill-box; transform-origin: center; }
+.ic-popk, .ic-trail, .ic-snow { opacity: 0; }
+
+/* Roller : il avance, les roues tournent */
+.ic-icon.is-roll svg { animation: ic-roll-move 1.1s ease-in-out; }
+.ic-icon.is-roll .ic-wheel { animation: ic-wheel-spin 1.1s ease-in-out; }
+@keyframes ic-roll-move { 40% { transform: translateX(8px); } 70% { transform: translateX(-3px); } }
+@keyframes ic-wheel-spin { 40% { transform: rotate(220deg); } 70% { transform: rotate(-60deg); } 100% { transform: rotate(0deg); } }
+
+/* Platines : le bras se pose sur le disque, le centre bat au rythme */
+.ic-icon.is-scratch .ic-arm { transform-box: view-box; transform-origin: 20px 3px; animation: ic-arm 1.6s ease-in-out; }
+.ic-icon.is-scratch .ic-label { animation: ic-beat 1.6s ease-in-out; }
+@keyframes ic-arm { 25%, 80% { transform: rotate(22deg); } }
+@keyframes ic-beat { 35% { transform: scale(1.3); } 45% { transform: scale(1); } 55% { transform: scale(1.3); } 65% { transform: scale(1); } }
+
+/* Vinyle : il tourne puis ralentit */
+.ic-icon.is-spin svg { animation: ic-spin 1.4s cubic-bezier(0.2, 0.7, 0.3, 1); }
+@keyframes ic-spin { to { transform: rotate(720deg); } }
+
+/* Disco : la boule tourne, les étoiles scintillent */
+.ic-icon.is-disco .ic-ball { animation: ic-ball-turn 1.4s ease-in-out; }
+.ic-icon.is-disco .ic-star { animation: ic-twinkle 1.4s ease-in-out; }
+.ic-icon.is-disco .ic-star-2 { animation-delay: 0.15s; }
+.ic-icon.is-disco .ic-star-3 { animation-delay: 0.3s; }
+@keyframes ic-ball-turn { 25% { transform: scaleX(0.15); } 50% { transform: scaleX(-1); } 75% { transform: scaleX(0.15); } }
+@keyframes ic-twinkle { 15% { transform: scale(0.2); opacity: 0.2; } 35% { transform: scale(1.4); opacity: 1; } 55% { transform: scale(0.3); opacity: 0.3; } 75% { transform: scale(1.2); opacity: 1; } }
+
+/* Popcorn : la boîte s'écrase, les grains sautent au-dessus */
+.ic-icon.is-pop .ic-box { transform-origin: 50% 100%; animation: ic-box-squash 0.9s ease-out; }
+.ic-icon.is-pop .ic-kernels { animation: ic-kernels-jump 0.9s ease-out; }
+.ic-icon.is-pop .ic-popk { animation: ic-popk 1s ease-out; }
+.ic-icon.is-pop .ic-popk-2 { animation-delay: 0.08s; }
+.ic-icon.is-pop .ic-popk-3 { animation-delay: 0.16s; }
+@keyframes ic-box-squash { 15% { transform: scale(1.06, 0.9); } 35% { transform: scale(0.97, 1.04); } 55% { transform: scale(1); } }
+@keyframes ic-kernels-jump { 15% { transform: translateY(1px); } 40% { transform: translateY(-5px); } 60% { transform: translateY(0); } 72% { transform: translateY(-1.5px); } 85% { transform: translateY(0); } }
+@keyframes ic-popk { 0% { opacity: 0; transform: translate(0, 0); } 15% { opacity: 1; } 50% { opacity: 1; transform: translate(calc(var(--dx) * 1px), -10px); } 100% { opacity: 0; transform: translate(calc(var(--dx) * 1.8px), -3px); } }
+
+/* Patin à glace : il glisse vers l'avant, sort et revient de l'autre côté */
+.ic-icon.is-glide svg { animation: ic-glide 1.4s ease-in-out; }
+.ic-icon.is-glide .ic-trail { animation: ic-trail 1.4s ease-out; }
+@keyframes ic-glide { 40% { transform: translateX(14px) rotate(-4deg); opacity: 1; } 52% { transform: translateX(22px); opacity: 0; } 53% { transform: translateX(-20px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+@keyframes ic-trail { 10% { opacity: 0.9; } 40% { opacity: 0.6; transform: translateX(-1px); } 50% { opacity: 0; } }
+
+/* Ski : il descend la pente, sort et revient d'en haut */
+.ic-icon.is-slope svg { animation: ic-slope 1.5s ease-in-out; }
+.ic-icon.is-slope .ic-snow { animation: ic-snow 1.5s ease-out; }
+@keyframes ic-slope { 15% { transform: translate(3px, 2px) rotate(3deg); } 28% { transform: translate(6px, 3px) rotate(-2deg); } 45% { transform: translate(13px, 8px) rotate(4deg); opacity: 1; } 55% { transform: translate(18px, 11px); opacity: 0; } 56% { transform: translate(-16px, -10px); opacity: 0; } 100% { transform: translate(0, 0); opacity: 1; } }
+@keyframes ic-snow { 10% { opacity: 0.7; transform: scale(0.6); } 45% { opacity: 0; transform: translate(-40px, -25px) scale(1.6); } }
+
+/* Volley : le ballon rebondit en tournant */
+.ic-icon.is-bounce .ic-vball { animation: ic-vball 1.1s ease-out; }
+@keyframes ic-vball { 25% { transform: translateY(-220px) rotate(120deg); } 50% { transform: translateY(0) rotate(240deg); } 68% { transform: translateY(-100px) rotate(300deg); } 85% { transform: translateY(0) rotate(345deg); } 100% { transform: rotate(360deg); } }
+
+/* Icône sans animation dédiée : petite pulsation */
+.ic-icon.is-pulse { animation: ic-pulse 0.5s ease-in-out; }
+@keyframes ic-pulse { 50% { transform: scale(1.2); } }
 
 /* 3. Projets */
 .work-title { font-size: 1.75rem; font-weight: 700; margin-bottom: 1.25rem; }
@@ -180,4 +241,31 @@ html.dark .p-go:hover { background: #111; color: #fff; }
 .work-all a { color: var(--muted); }
 .work-all a:hover { color: inherit;}
 </style>
+
+<script>
+/* Joue l'animation de l'icône cliquée dans le bandeau */
+(function () {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.querySelectorAll('.ic-track').forEach(function (track) {
+        track.addEventListener('click', function (e) {
+            var item = e.target.closest('.ic-item');
+            if (!item || reduce) { return; }
+            var icon = item.querySelector('.ic-icon');
+            var cls = 'is-' + (item.dataset.anim || 'pulse');
+            var run = (Number(icon.dataset.run) || 0) + 1;
+            icon.dataset.run = run;
+            icon.classList.remove(cls);
+            void icon.offsetWidth; /* relance l'animation si on clique plusieurs fois */
+            icon.classList.add(cls);
+            var end = function () { if (Number(icon.dataset.run) === run) { icon.classList.remove(cls); } };
+            if (icon.getAnimations) {
+                /* attend la fin de toutes les animations (boule, étoiles, grains…) */
+                Promise.all(icon.getAnimations({ subtree: true }).map(function (an) { return an.finished; })).then(end, end);
+            } else {
+                setTimeout(end, 2000);
+            }
+        });
+    });
+})();
+</script>
 {{ end }}

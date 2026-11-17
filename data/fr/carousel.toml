@@ -1,11 +1,14 @@
+# Bandeau des passions
+# file : icône SVG découpée (chemin dans le dossier assets/, ex. icons/roller.svg), intégrée dans la page pour animer chaque partie
+# name : nom affiché au survol et lu par les lecteurs d'écran
+# anim : animation jouée au clic (roll, scratch, spin, disco, pop, glide, slope, bounce, pulse)
 items = [
-  { svg = "https://api.iconify.design/mdi/roller-skate.svg"},
-  { svg = "https://api.iconify.design/jam/dj-f.svg"},
-  { svg = "https://api.iconify.design/pinhead/vinyl-record.svg"},
-  { svg = "https://api.iconify.design/streamline-ultimate/night-club-disco-ball-bold.svg"},
-  { svg = "https://api.iconify.design/boxicons/popcorn-filled.svg"},
-  { svg = "https://api.iconify.design/icon-park-solid/trousers-bell-bottoms.svg"},
-  { svg = "https://api.iconify.design/pinhead/ice-skate.svg"},
-  { svg = "https://api.iconify.design/ph/person-simple-ski-fill.svg"},
-  { svg = "https://api.iconify.design/fa6-solid/volleyball.svg"},
+  { file = "icons/roller.svg", name = "Roller", anim = "roll" },
+  { file = "icons/platines.svg", name = "Platines", anim = "scratch" },
+  { file = "icons/vinyle.svg", name = "Vinyles", anim = "spin" },
+  { file = "icons/disco.svg", name = "Disco", anim = "disco" },
+  { file = "icons/popcorn.svg", name = "Cinéma", anim = "pop" },
+  { file = "icons/patin.svg", name = "Patin à glace", anim = "glide" },
+  { file = "icons/ski.svg", name = "Ski", anim = "slope" },
+  { file = "icons/volley.svg", name = "Volley", anim = "bounce" },
 ]
