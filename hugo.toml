@@ -22,3 +22,6 @@ defaultContentLanguageInSubdir = false   # adresses sans /fr/
   description = "Ingénieur des médias"
   linkedin = "https://linkedin.com/in/cédric-bartolacelli"
   email = "barto.cedric@gmail.com"
+# Les images seules dans le texte deviennent des figures (sans <p> autour)
+[markup.goldmark.parser]
+  wrapStandAloneImageWithinParagraph = false

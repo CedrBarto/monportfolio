@@ -54,11 +54,16 @@
         {{ with first 3 $selection.ByDate.Reverse }}
         <div class="p-grid p-count-{{ len . }}">
             {{ range . }}
-            <article class="p-card bg-bg-primary-light dark:bg-bg-primary-dark">
+            {{ $pos := .Params.imagePosition | default "center" }}
+            {{ $thumb := .Params.thumb }}
+            {{ $img := $thumb | default .Params.image }}
+            <article class="p-card{{ if $img }} has-img{{ end }}{{ if $thumb }} is-designed{{ end }} bg-bg-primary-light dark:bg-bg-primary-dark">
                 <span class="p-name">{{ .Title }}</span>
-                <span class="p-media">
-                    {{ with .Params.image }}<img src="{{ . | relURL }}" alt="" loading="lazy">{{ end }}
-                </span>
+                {{ with $img }}
+                <img class="p-bg" src="{{ . | relURL }}" alt="" loading="lazy" style="object-position: {{ $pos }}">
+                {{ else }}
+                <span class="p-media"></span>
+                {{ end }}
                 <a href="{{ .RelPermalink }}" class="p-go" aria-label="Voir le projet {{ .Title }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
                 </a>
@@ -215,6 +220,45 @@ html.dark .p-card { border-color: #e5e5e5; }
 html.dark .p-go { background: #f5f5f5; color: #111; }
 .p-go:hover { background: #fff; color: #111; }
 html.dark .p-go:hover { background: #111; color: #fff; }
+
+/* Carte avec image : l'image remplace le cadre, légèrement transparente */
+.p-card.has-img { padding: 0; overflow: hidden; }
+.p-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.82;
+    transition: opacity 0.3s ease, transform 0.5s ease;
+}
+.p-card.has-img::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9) 0, rgba(255, 255, 255, 0.55) 3.25rem, rgba(255, 255, 255, 0) 7rem);
+}
+html.dark .p-card.has-img::before {
+    background: linear-gradient(to bottom, rgba(18, 18, 18, 0.9) 0, rgba(18, 18, 18, 0.55) 3.25rem, rgba(18, 18, 18, 0) 7rem);
+}
+.p-card.has-img .p-name { position: relative; z-index: 2; margin: 0; padding: 0.8rem 0.9rem; }
+.p-card.has-img .p-go { z-index: 3; }
+/* Effet seulement quand on survole le bouton (seul élément cliquable) */
+.p-card.has-img:has(.p-go:hover) .p-bg { opacity: 1; transform: scale(1.03); }
+/* Miniature conçue (param "thumb") : image pleine, sans voile, texte clair */
+.p-card.is-designed .p-bg { opacity: 1; }
+.p-card.is-designed::before,
+html.dark .p-card.is-designed::before { background: none; }
+.p-card.is-designed .p-name { color: #fff; }
+.p-card.is-designed .p-go,
+html.dark .p-card.is-designed .p-go { background: #fff; color: #111; }
+.p-card.is-designed .p-go:hover,
+html.dark .p-card.is-designed .p-go:hover { background: #111; color: #fff; }
+.p-card.is-designed:has(.p-go:hover) { box-shadow: 0 20px 30px -8px rgba(0, 0, 0, 0.3); }
+.p-card.has-img { transition: box-shadow 0.3s ease; }
+@media (prefers-reduced-motion: reduce) { .p-bg { transition: none; } .p-card.has-img:has(.p-go:hover) .p-bg { transform: none; } }
 
 /* Disposition mobile : cartes empilées, la 1re verticale, les autres horizontales */
 .p-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }

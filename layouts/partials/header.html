@@ -47,9 +47,10 @@
             font-weight: 600;
         }
         .site-header { padding: 1.5rem 0; }
-        .site-header-inner { padding: 0 1.25rem; }
-        @media (min-width: 768px) { .site-header-inner { padding: 0 3.5rem; } }
-        .site-header-row { max-width: 48rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+        /* Mêmes largeur et marges que le contenu de la page (.page-wrap + .home) */
+        .site-header-inner { width: 100%; margin: 0 auto; padding: 0 1.25rem; }
+        @media (min-width: 768px) { .site-header-inner { max-width: 55rem; padding: 0 3.5rem; } }
+        .site-header-row { max-width: 48rem; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
         .site-nav { display: flex; align-items: center; gap: 1.5rem; }
         .site-link { font-size: 1rem; color: #6b7280; text-decoration: none; }
         html.dark .site-link { color: #9ca3af; }
@@ -66,7 +67,7 @@
     </style>
 </head>
 <header class="site-header relative">
-    <div class="site-header-inner w-full md:w-4/5 lg:w-3/5 mx-auto">
+    <div class="site-header-inner">
         <div class="site-header-row">
             <nav class="site-nav" aria-label="Navigation principale">
                 <a href="{{ site.Home.RelPermalink }}" class="site-link{{ if .IsHome }} is-current{{ end }}">Accueil</a>
