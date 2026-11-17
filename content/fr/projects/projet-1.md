@@ -3,67 +3,60 @@ title: "Customer Hub - Nidecker Group"
 slug: "customer-hub-nidecker"
 date: 2026-11-17
 period: "7 août 2026"
-description: "Travail de Bachelor chez Nidecker Group. Un espace client centralisé pour les marques du groupe, pensé avec les contraintes de Shopify plutôt que contre elles."
-intro: "Réalisé au sein de Nidecker Group à Rolle, mon travail de Bachelor portait au départ sur la personnalisation de l'espace client des sites du groupe. Très vite, une contrainte a tout changé. Avec la migration vers Shopify et la mise à jour « New Customer Accounts », il n'était presque plus possible de modifier l'espace client côté développement. J'ai donc mené un audit de l'écosystème Shopify pour trouver une solution qui fonctionne dans ces limites, simple à prendre en main pour les équipes et réellement utile aux clients. Elle a pris la forme d'un Customer Hub, mis en place et testé sur l'environnement de test de l'entreprise."
+description: "Travail de Bachelor chez Nidecker Group. Le Customer Hub, une application Shopify mise en place comme alternative complète à l'espace client des sites du groupe."
+intro: "Travail de Bachelor réalisé chez Nidecker Group. Le Customer Hub est une application Shopify mise en place comme alternative complète à l'espace client des sites du groupe, sur lequel les possibilités de développement étaient désormais limitées par la plateforme. Il réunit commandes, favoris, recommandations et assistance dans un volet accessible depuis toutes les pages."
 featured: true
 image: "images/projets/customer-hub/cover.webp"
 imageAlt: "Le Customer Hub ouvert sur le site Emerica, avec les accès au statut pro, à la FAQ, au suivi de commande et aux retours"
 thumb: "images/projets/customer-hub/miniature-v3.webp"
 imagePosition: "60% 50%"
-imageCaption: "Le Customer Hub sur le site Emerica, une des marques du groupe. Il s'ouvre en volet latéral depuis n'importe quelle page."
 
 ---
 
-## Contexte
-
-Fondée en 1887 à Rolle, Nidecker Group est la plus ancienne entreprise de sports de planche au monde. Ce groupe familial réunit plusieurs marques de snowboard et de skate, distribuées dans plus de soixante pays. Comme il ne possède aucun magasin en propre, ses sites web sont le principal point de contact direct avec ses clients. L'espace client y joue un rôle clé, car c'est lui qui prolonge la relation après l'achat.
-
 ## Défi
 
-Le mandat de départ était ambitieux. Il s'agissait de créer un profil unifié pour les différentes marques du groupe, avec des espaces adaptés à chaque type de compte, une vue claire des avantages, de l'historique d'achat et des programmes, le tout dans une interface fidèle à l'identité des marques.
+Le mandat demandait un profil unifié pour toutes les marques, adapté à chaque type de compte, avec les avantages, l'historique d'achat et les programmes. La migration vers Shopify et la mise à jour « Customer Accounts » ont toutefois fortement limité la personnalisation, empêchant un développement selon les méthodes habituelles des équipes.
 
-La migration vers Shopify a cependant fortement réduit la marge de manœuvre. La question est donc devenue la suivante. Comment répondre à ces besoins sans sortir des limites de la plateforme, sans nouvelle technologie à maintenir, et avec un vrai bénéfice pour les utilisateurs ?
+L'objectif est donc de répondre aux besoins réels des utilisateurs dans ces limites, en centralisant l'information sur le site et en rendant l'utilisateur autonome, afin de réduire le recours au service client et la dépendance aux solutions externes.
 
 ## Démarche inversée
 
-Un projet UX part habituellement des utilisateurs pour aboutir à l'interface. Ici, l'écosystème était déjà en place techniquement et laissait peu de liberté, ce qui rendait des tests utilisateurs en amont peu pertinents. J'ai donc choisi d'inverser l'ordre des étapes.
+Le travail suit trois axes, analyser, concevoir et recommander. La plateforme étant déjà en place et peu modifiable, l'analyse inverse la démarche UX habituelle et part des possibilités techniques plutôt que de tests utilisateurs.
 
-1. **Faire l'état des lieux** de ce qui manque dans l'espace client actuel.
-2. **Analyser la concurrence** pour repérer ce qui se fait de mieux ailleurs.
-3. **Trier les tickets du service client** avec l'aide d'un connecteur Claude, afin de faire ressortir les questions et les problèmes les plus fréquents.
-4. **Évaluer les applications Shopify** capables de combler ces manques.
-5. **Valider le choix** avec les principaux profils de clients, à travers des personas, des parcours utilisateurs et des task flows.
+1. **État des lieux** de ce qui manque à l'espace client actuel.
+2. **Benchmark** des meilleures pratiques du secteur.
+3. **Analyse des tickets du service client**, triés avec un connecteur Claude, pour cibler les demandes les plus fréquentes.
+4. **Évaluation des applications Shopify** capables de combler ces manques.
+5. **Conception et validation** avec des personas, des parcours utilisateurs et des maquettes.
 
-J'ai mené ce projet seul, avec une grande liberté dans la démarche. J'ai organisé mon temps en autonomie, en commençant par une pré-étude et un planning des tâches, tout en m'appuyant sur les équipes de l'entreprise et sur mon mandant.
+Le projet a été mené seul et en autonomie, de la planification à la mise en place, avec l'appui des équipes et du mandant.
 
-## Customer Hub comme solution
+## Solution
 
-Plutôt que de développer une solution sur mesure, difficile à maintenir dans l'écosystème Shopify, j'ai retenu le Customer Hub de Klaviyo. Il s'agit d'un volet latéral accessible depuis n'importe quelle page, sans quitter le site. Il réunit les commandes, les recommandations, une FAQ ciblée et un accès direct à l'assistance. Il ajoute aussi les favoris, une fonctionnalité qui manquait jusque-là aux sites du groupe.
+La conception aboutit à un espace client fonctionnel structuré autour du Customer Hub de Klaviyo, un volet latéral accessible depuis toutes les pages. Il centralise les commandes, les recommandations, les favoris, une FAQ ciblée et l'assistance.
 
-Associé à d'autres applications, comme Rich Returns pour les retours en libre-service ou Alliance Pro pour le programme des clients professionnels, il couvre les besoins identifiés pendant l'audit tout en restant simple à configurer pour les équipes.
+Associé à Rich Returns pour les retours et à Alliance Pro pour les clients professionnels, il couvre les besoins relevés pendant l'audit, sans développement sur mesure et en restant simple à gérer pour les équipes.
 
-## Valider la solution avec les principaux utilisateurs
+## Mieux comprendre le rôle du Customer Hub
 
 ### Trois personas
 
-Pour vérifier que la solution répond aux vrais besoins, j'ai défini trois profils représentatifs des principaux clients du groupe. Lucas est un snowboardeur occasionnel qui veut suivre sa commande et savoir vers qui se tourner en cas de défaut. Sophie est monitrice et cliente pro, elle souhaite voir son statut et ses points. Théo achète régulièrement des chaussures de skate et veut pouvoir retourner une paire en quelques clics.
+Trois profils représentatifs des clients du groupe. Lucas veut suivre sa commande, Sophie, cliente pro, veut consulter son statut et ses points, et Théo veut retourner une paire facilement.
 
-![Fiches personas](images/projets/customer-hub/personas.webp "Les personas présentent le profil, le comportement et les attentes de chaque client envers l'espace client.")
+![Fiches personas](images/projets/customer-hub/personas.webp "Profil, comportement et attentes de chaque client.")
 
 ### Parcours utilisateurs
 
-Pour chaque persona, un parcours suit une situation concrète, étape par étape, avec ce que la personne pense et ressent. Il montre à quel moment le Customer Hub intervient et où les frictions disparaissent.
+Chaque parcours suit une situation concrète et montre à quel moment le Customer Hub supprime les frictions.
 
-![Carte des parcours](images/projets/customer-hub/user-flow.webp "Chaque parcours suit l'émotion du client, du premier contact jusqu'à la résolution de son besoin.")
+![Carte des parcours](images/projets/customer-hub/user-flow.webp "Du premier contact à la résolution du besoin, avec le ressenti du client.")
 
 ### Task flows
 
-Les task flows détaillent ensuite le chemin exact dans le Customer Hub, de la connexion jusqu'à l'action. Ils confirment que chaque besoin se règle en quelques clics seulement.
+Ils détaillent le chemin dans le Customer Hub et confirment que chaque besoin se règle en quatre ou cinq étapes.
 
-![Schéma des task flows](images/projets/customer-hub/task-flow.webp "Suivre une commande, consulter son statut pro ou retourner une paire, chaque tâche tient en quatre ou cinq étapes.")
+![Schéma des task flows](images/projets/customer-hub/task-flow.webp "Suivre une commande, consulter son statut pro, retourner une paire.")
 
 ## Résultat
 
-La solution a été configurée et testée sur l'environnement de test de l'entreprise. J'ai documenté chacun de mes choix dans un rapport, puis formulé des recommandations à court et à long terme pour faire évoluer l'espace client.
-
-Nidecker Group dispose ainsi d'un espace client à la hauteur de ses marques. Il réduit les frictions du parcours d'achat et allège la charge du service client, en rendant l'utilisateur plus autonome.
+La solution a été configurée et testée sur l'environnement de test de l'entreprise. Le travail se conclut par un rapport et des recommandations techniques et stratégiques, à court et à long terme, pour doter Nidecker Group d'un espace client à la hauteur de ses marques et réduire les frictions avec le service client.
