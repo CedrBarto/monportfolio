@@ -4,7 +4,9 @@
 
     <!-- En-tête : même style que la présentation de l'accueil -->
     <header class="proj-head">
-        <a class="proj-back" href="{{ "projects/" | relLangURL }}">← Projets</a>
+        <a class="proj-back" href="{{ "projects/" | relLangURL }}" aria-label="Retour aux projets">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        </a>
         <h1 class="proj-title">{{ .Title }}</h1>
         <p class="proj-date">{{ with .Params.period }}{{ . }}{{ else }}{{ .Date | time.Format "January 2006" }}{{ end }}</p>
         {{ with .Params.intro }}<p class="proj-lead">{{ . }}</p>{{ end }}
@@ -26,12 +28,12 @@
     </figure>
     {{ end }}
 
-    <!-- Descriptif et images expliquées -->
+    <!-- Descriptif et images expliquées (images en aperçu réduit, à agrandir) -->
+    <script>document.documentElement.classList.add('fig-js');</script>
     <div class="proj-body">
         {{ .Content }}
     </div>
 
-    <p class="proj-end"><a href="{{ "projects/" | relLangURL }}">← Tous les projets</a></p>
 
 </article>
 </div>
@@ -58,46 +60,85 @@ html.dark {
 
 /* En-tête */
 .proj-head { margin: 2rem 0 1.5rem; }
-.proj-back { display: inline-block; margin-bottom: 1.25rem; font-size: 0.9rem; font-weight: 700; color: var(--muted); text-decoration: none; }
-.proj-back:hover { color: inherit; }
+/* Bouton retour : même style que les boutons e-mail et LinkedIn de l'accueil */
+.proj-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(75, 85, 99, 0.3);
+    border-radius: 0.45rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    color: inherit;
+    text-decoration: none;
+}
+.proj-back:hover { border-color: currentColor; }
+.proj-back:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+
 .proj-title { font-size: clamp(1.75rem, 6vw, 2.5rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; }
 .proj-date { margin-top: 0.5rem; font-size: 0.85rem; color: var(--muted); }
 .proj-lead { margin-top: 1.25rem; font-size: 1rem; line-height: 1.6; color: var(--muted); }
 @media (min-width: 768px) { .proj-lead { font-size: 1.05rem; } }
 
-/* Mots-clés en pastilles */
-.proj-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 2.5rem; padding: 0; list-style: none; }
-.proj-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.35rem 0.8rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    line-height: 1.2;
-    color: #4b5563;
-    border: 1px solid rgba(75, 85, 99, 0.3);
-    border-radius: 0.45rem;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
-    white-space: nowrap;
-}
-html.dark .proj-badge { color: #d1d5db; border-color: rgba(156, 163, 175, 0.3); }
-
 /* Images : même cadre que les cartes de l'accueil */
 .proj-cover, .md-figure { margin: 0 0 2.5rem; }
-.proj-cover img, .md-figure img {
+.proj-cover img, .md-frame {
     display: block;
     width: 100%;
-    height: auto;
     border: 1px solid var(--edge);
     border-radius: 0.6rem;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
     background: #fff;
 }
+.proj-cover img { height: auto; }
+.md-frame { position: relative; overflow: hidden; }
+.md-frame img { display: block; width: 100%; height: auto; }
 .proj-cover figcaption, .md-figure figcaption { margin-top: 0.75rem; font-size: 0.8rem; line-height: 1.5; color: var(--muted); }
-.md-figure figcaption span { white-space: nowrap; }
-.md-zoom { display: block; cursor: zoom-in; }
-.md-zoom img { transition: transform 0.3s ease; }
-.md-zoom:hover img { transform: translateY(-3px); }
+.md-hd { font-weight: 700; white-space: nowrap; color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.md-hd:hover { color: #111; }
+html.dark .md-hd:hover { color: #f5f5f5; }
+
+/* Aperçu réduit : on ne voit que le haut de l'image, un bouton l'affiche en entier */
+.fig-js .md-figure.is-collapsible .md-frame { max-height: 16rem; transition: max-height 0.45s cubic-bezier(0.25, 0.8, 0.25, 1); }
+@media (max-width: 767px) { .fig-js .md-figure.is-collapsible .md-frame { max-height: 12rem; } }
+.fig-js .md-figure.is-collapsible .md-frame::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 5rem;
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0));
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.fig-js .md-figure.is-open .md-frame::after { opacity: 0; }
+
+/* Bouton agrandir / réduire : même style que les boutons des cartes de l'accueil */
+.md-toggle {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: 0;
+    border-radius: 0.4rem;
+    background: #111;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.md-toggle:hover { background: #fff; color: #111; box-shadow: inset 0 0 0 1px #111; }
+.md-toggle:focus-visible { outline: 2px solid #111; outline-offset: 2px; }
+.md-ico-close, .is-open .md-ico-open { display: none; }
+.is-open .md-ico-close { display: block; }
+@media (prefers-reduced-motion: reduce) { .fig-js .md-figure.is-collapsible .md-frame { transition: none; } }
 
 /* Descriptif */
 .proj-body { font-size: 0.95rem; line-height: 1.7; }
@@ -117,4 +158,46 @@ html.dark .proj-body strong { color: #f5f5f5; }
 .proj-end a { color: var(--muted); text-decoration: none; }
 .proj-end a:hover { color: inherit; }
 </style>
+<script>
+/* Images du descriptif : aperçu réduit, le bouton affiche l'image entière ou la réduit */
+(function () {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.querySelectorAll('[data-fig]').forEach(function (fig) {
+        var frame = fig.querySelector('.md-frame');
+        var img = frame && frame.querySelector('img');
+        var btn = fig.querySelector('[data-fig-toggle]');
+        if (!frame || !img || !btn) { return; }
+
+        /* On ne réduit que les images nettement plus hautes que l'aperçu */
+        fig.classList.add('is-collapsible');
+        if (img.getBoundingClientRect().height <= frame.clientHeight + 40) {
+            fig.classList.remove('is-collapsible');
+            return;
+        }
+        btn.hidden = false;
+
+        function setOpen(open) {
+            fig.classList.toggle('is-open', open);
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            btn.setAttribute('aria-label', (open ? "Réduire l'image : " : "Afficher l'image entière : ") + img.alt);
+        }
+        btn.addEventListener('click', function () {
+            var open = !fig.classList.contains('is-open');
+            if (open) {
+                frame.style.maxHeight = frame.scrollHeight + 'px';
+                setOpen(true);
+                var done = function () { if (fig.classList.contains('is-open')) { frame.style.maxHeight = 'none'; } };
+                if (reduce) { done(); } else { frame.addEventListener('transitionend', done, { once: true }); }
+            } else {
+                frame.style.maxHeight = frame.scrollHeight + 'px';
+                void frame.offsetHeight;
+                frame.style.maxHeight = '';
+                setOpen(false);
+                var top = fig.getBoundingClientRect().top;
+                if (top < 0) { fig.scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' }); }
+            }
+        });
+    });
+})();
+</script>
 {{ end }}

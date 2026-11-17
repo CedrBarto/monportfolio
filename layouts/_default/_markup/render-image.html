@@ -1,4 +1,4 @@
-{{- /* Image Markdown : cadre du site, légende, et lien vers la version HD si un fichier "-hd" existe */ -}}
+{{- /* Image Markdown : cadre du site, aperçu réduit qu'on peut agrandir, légende et lien vers la version HD si un fichier "-hd" existe */ -}}
 {{- $src := .Destination -}}
 {{- $remote := or (strings.HasPrefix $src "http://") (strings.HasPrefix $src "https://") -}}
 {{- $url := $src -}}
@@ -14,9 +14,15 @@
   {{- $hdSrc := replaceRE `\.(\w+)$` "-hd.$1" $src -}}
   {{- if fileExists (path.Join "static" $hdSrc) -}}{{- $hd = $hdSrc | relURL -}}{{- end -}}
 {{- end -}}
-<figure class="md-figure">
-  {{- if $hd }}<a class="md-zoom" href="{{ $hd }}" target="_blank" rel="noopener" aria-label="Agrandir l'image : {{ .Text }}">{{ end -}}
-  <img src="{{ $url }}" alt="{{ .Text }}"{{ if $w }} width="{{ $w }}" height="{{ $h }}"{{ end }} loading="lazy" decoding="async">
-  {{- if $hd }}</a>{{ end -}}
-  {{- with .Title }}<figcaption>{{ . }}{{ if $hd }} <span>· Cliquer pour agrandir</span>{{ end }}</figcaption>{{ end -}}
+<figure class="md-figure" data-fig>
+  <div class="md-frame">
+    <img src="{{ $url }}" alt="{{ .Text }}"{{ if $w }} width="{{ $w }}" height="{{ $h }}"{{ end }} loading="lazy" decoding="async">
+    <button type="button" class="md-toggle" aria-expanded="false" aria-label="Afficher l'image entière : {{ .Text }}" data-fig-toggle hidden>
+      <svg class="md-ico-open" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="m21 3-7 7"/><path d="m3 21 7-7"/></svg>
+      <svg class="md-ico-close" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14h6v6"/><path d="M20 10h-6V4"/><path d="m14 10 7-7"/><path d="m3 21 7-7"/></svg>
+    </button>
+  </div>
+  {{- if or .Title $hd }}
+  <figcaption>{{ .Title }}{{ if $hd }} <a class="md-hd" href="{{ $hd }}" target="_blank"></a>{{ end }}</figcaption>
+  {{- end }}
 </figure>

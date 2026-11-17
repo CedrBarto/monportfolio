@@ -1,91 +1,135 @@
 {{ define "main" }}
-<div class="w-full md:w-3/4 lg:w-1/2 mx-auto px-4 py-12">
-    <h1 class="text-3xl md:text-5xl font-bold mb-8 md:mb-12 text-text-primary-light dark:text-text-primary-dark">{{ .Title }}</h1>
-    
-    <div class="grid grid-cols-1 gap-6 md:gap-8 max-w-3xl mx-auto">
-        {{ $projectsData := index hugo.Data .Language.Lang "projects" }}
-        {{ range $projectsData.projects }}
-        <div class="project-card relative overflow-hidden rounded-lg bg-bg-primary-light dark:bg-bg-secondary-dark border border-border-primary-light dark:border-border-primary-dark transition-all duration-300 group">
-            <div class="aspect-w-16 aspect-h-9 overflow-hidden relative">
-                <div class="absolute inset-0 bg-gradient-to-br from-accent-light/20 to-accent-light/20 dark:from-accent-dark/20 dark:to-accent-dark/20 z-10"></div>
-                <img src="{{ .image }}" alt="{{ .title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-60 z-20"></div>
-                
-                <!-- Content that moves up on hover -->
-                <div class="absolute inset-0 z-30 p-4 pb-3 md:p-6 md:pb-4 flex flex-col justify-end transform transition-transform duration-500 translate-y-0 group-hover:translate-y-[-20px]">
-                    <h3 class="text-xl md:text-2xl font-bold mb-1.5 md:mb-2 text-white line-clamp-2">{{ .title }}</h3>
-                    <div class="flex flex-wrap gap-1 md:gap-2 mb-1.5 md:mb-3">
-                        {{ $techs := split .tech "," }}
-                        {{ range $tech := $techs }}
-                        <span class="px-1.5 md:px-2 py-0.5 bg-neutral-700/30 backdrop-blur-sm rounded-md text-[10px] md:text-xs font-medium text-white">{{ $tech }}</span>
-                        {{ end }}
-                    </div>
-                    <p class="hidden md:block text-sm text-white mb-3 line-clamp-3 md:line-clamp-4">{{ .description }}</p>
-                    
-                    <!-- Learn More button -->
-                    <a href="{{ .link }}" class="bg-accent-light/90 dark:bg-accent-dark/90 backdrop-blur-sm hover:bg-accent-light dark:hover:bg-accent-dark text-neutral-800 dark:text-white text-xs md:text-sm font-medium py-1 md:py-1.5 px-2 md:px-3 rounded-md inline-block transition-all duration-300 transform opacity-100 md:opacity-0 group-hover:opacity-100 w-fit flex items-center shadow-lg hover:shadow-xl">
-                        Learn More
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 ml-1 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </a>
-                </div>
-            </div>
-        </div>
+<div class="page-wrap w-full mx-auto py-12">
+<div class="plist">
+
+    <!-- Titre : même style que le nom sur l'accueil -->
+    <header class="plist-head">
+        <h1 class="plist-title">{{ .Title }}</h1>
+        {{ with .Description }}<p class="plist-lead">{{ . }}</p>{{ end }}
+    </header>
+
+    <!-- Tous les projets, du plus récent au plus ancien, 2 par rangée -->
+    {{ with .Pages.ByDate.Reverse }}
+    <div class="plist-grid">
+        {{ range . }}
+        {{ $thumb := .Params.thumb }}
+        {{ $img := $thumb | default .Params.image }}
+        {{ $pos := .Params.imagePosition | default "center" }}
+        <article class="p-card{{ if $img }} has-img{{ end }}{{ if $thumb }} is-designed{{ end }} bg-bg-primary-light dark:bg-bg-primary-dark">
+            <span class="p-name">{{ .Title }}</span>
+            {{ with $img }}
+            <img class="p-bg" src="{{ . | relURL }}" alt="" loading="lazy" style="object-position: {{ $pos }}">
+            {{ else }}
+            <span class="p-media"></span>
+            {{ end }}
+            <a href="{{ .RelPermalink }}" class="p-go" aria-label="Voir le projet {{ .Title }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+            </a>
+        </article>
         {{ end }}
     </div>
+    {{ else }}
+    <p class="plist-lead">Les projets arrivent bientôt.</p>
+    {{ end }}
+
+</div>
 </div>
 
 <style>
-.project-card {
-    height: 100%;
+:root {
+    --muted: #6b7280;
+    --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+html.dark { --muted: #9ca3af; }
+
+/* Mise en page : mêmes largeur et marges que l'accueil */
+.page-wrap { padding-left: 1.25rem; padding-right: 1.25rem; }
+@media (min-width: 768px) {
+    .page-wrap { max-width: 55rem; padding-left: 3.5rem; padding-right: 3.5rem; }
+}
+.plist { max-width: 48rem; font-family: var(--mono); }
+
+/* Titre : même taille que le nom sur l'accueil */
+.plist-head { margin: 2rem 0 2rem; }
+.plist-title { font-size: clamp(1.75rem, 6vw, 2.5rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; }
+.plist-lead { margin-top: 1.25rem; font-size: 1rem; line-height: 1.6; color: var(--muted); }
+
+/* Grille : 2 cartes par rangée (1 seule sur petit téléphone) */
+.plist-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+@media (min-width: 560px) { .plist-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 768px) { .plist-grid { gap: 2rem 1.25rem; } }
+.plist-grid .p-card { aspect-ratio: 16 / 10; }
+
+/* La carte : même style que la grande carte de l'accueil */
+.p-card {
+    position: relative;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    /* Use Tailwind theme variables for more modular approach */
-    @apply bg-bg-primary-light dark:bg-bg-secondary-dark;
-    backdrop-filter: blur(10px);
+    padding: 0.75rem;
+    border: 1px solid #111;
+    border-radius: 0.6rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    color: inherit;
+    text-decoration: none;
 }
-
-.project-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
-    border-color: rgba(2, 132, 199, 0.5); /* accent-light with alpha */
-}
-html.dark .project-card:hover {
-    border-color: rgba(14, 165, 233, 0.5); /* accent-dark with alpha */
-}
-
-.aspect-w-16 {
-    position: relative;
-    padding-bottom: 56.25%;
-}
-
-.aspect-w-16 > img {
+html.dark .p-card { border-color: #e5e5e5; }
+.p-name { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.6rem; padding-right: 0.5rem; }
+.p-media { position: relative; flex: 1; min-height: 0; border-radius: 0.4rem; overflow: hidden; }
+.p-go {
     position: absolute;
-    height: 100%;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.4rem;
+    background: #111;
+    color: #fff;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+html.dark .p-go { background: #f5f5f5; color: #111; }
+.p-go:hover { background: #fff; color: #111; }
+html.dark .p-go:hover { background: #111; color: #fff; }
+.p-go:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+
+/* Carte avec image : l'image remplace le cadre, légèrement transparente */
+.p-card.has-img { padding: 0; overflow: hidden; transition: box-shadow 0.3s ease; }
+.p-bg {
+    position: absolute;
+    inset: 0;
     width: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    height: 100%;
     object-fit: cover;
-    filter: saturate(1.1) contrast(1.1);
+    opacity: 0.82;
+    transition: opacity 0.3s ease, transform 0.5s ease;
 }
+.p-card.has-img::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9) 0, rgba(255, 255, 255, 0.55) 3.25rem, rgba(255, 255, 255, 0) 7rem);
+}
+html.dark .p-card.has-img::before {
+    background: linear-gradient(to bottom, rgba(18, 18, 18, 0.9) 0, rgba(18, 18, 18, 0.55) 3.25rem, rgba(18, 18, 18, 0) 7rem);
+}
+.p-card.has-img .p-name { position: relative; z-index: 2; margin: 0; padding: 0.8rem 0.9rem; }
+.p-card.has-img .p-go { z-index: 3; }
+.p-card.has-img:has(.p-go:hover) .p-bg { opacity: 1; transform: scale(1.03); }
 
-.text-3xl {
-    font-weight:700;
-}
-
-@media (max-width: 768px) {
-    .project-card:hover {
-        transform: none;
-    }
-    
-    .project-card .group-hover\:translate-y-\[-20px\] {
-        transform: translateY(-10px);
-    }
-}
+/* Miniature conçue (param "thumb") : image pleine, sans voile, texte clair */
+.p-card.is-designed .p-bg { opacity: 1; }
+.p-card.is-designed::before,
+html.dark .p-card.is-designed::before { background: none; }
+.p-card.is-designed .p-name { color: #fff; }
+.p-card.is-designed .p-go,
+html.dark .p-card.is-designed .p-go { background: #fff; color: #111; }
+.p-card.is-designed .p-go:hover,
+html.dark .p-card.is-designed .p-go:hover { background: #111; color: #fff; }
+.p-card.is-designed:has(.p-go:hover) { box-shadow: 0 20px 30px -8px rgba(0, 0, 0, 0.3); }
+@media (prefers-reduced-motion: reduce) { .p-bg { transition: none; } .p-card.has-img:has(.p-go:hover) .p-bg { transform: none; } }
 </style>
-{{ end }} 
+{{ end }}

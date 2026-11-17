@@ -45,35 +45,42 @@
     {{ end }}
     {{ end }}
 
-    <!-- 3. Projets : 1 carte verticale + 2 horizontales -->
+    <!-- 3. Projets : 1 grande carte + 3 petites qui s'échangent -->
     {{ $projets := where site.RegularPages "Section" "projects" }}
     {{ $selection := where $projets "Params.featured" true }}
     {{ if not $selection }}{{ $selection = $projets }}{{ end }}
     <section class="work">
         <h2 class="work-title">Quelques projets</h2>
-        {{ with first 3 $selection.ByDate.Reverse }}
-        <div class="p-grid p-count-{{ len . }}">
-            {{ range . }}
-            {{ $pos := .Params.imagePosition | default "center" }}
+        {{ with first 4 $selection.ByDate.Reverse }}
+        <div class="pc-deck" data-deck>
+            {{ range $i, $p := . }}
             {{ $thumb := .Params.thumb }}
             {{ $img := $thumb | default .Params.image }}
-            <article class="p-card{{ if $img }} has-img{{ end }}{{ if $thumb }} is-designed{{ end }} bg-bg-primary-light dark:bg-bg-primary-dark">
+            <article class="p-card pc-card{{ if eq $i 0 }} is-big{{ else }} is-small{{ end }}{{ if $img }} has-img{{ end }}{{ if $thumb }} is-designed{{ end }} bg-bg-primary-light dark:bg-bg-primary-dark" style="view-transition-name: pc-{{ $i }}" data-card>
                 <span class="p-name">{{ .Title }}</span>
                 {{ with $img }}
-                <img class="p-bg" src="{{ . | relURL }}" alt="" loading="lazy" style="object-position: {{ $pos }}">
+                <img class="p-bg" src="{{ . | relURL }}" alt="" loading="lazy" style="object-position: {{ $p.Params.imagePosition | default "center" }}">
                 {{ else }}
                 <span class="p-media"></span>
                 {{ end }}
                 <a href="{{ .RelPermalink }}" class="p-go" aria-label="Voir le projet {{ .Title }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
                 </a>
+                <button type="button" class="pc-grow" aria-label="Agrandir le projet {{ .Title }}" data-grow>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="m21 3-7 7"/><path d="m3 21 7-7"/></svg>
+                </button>
             </article>
             {{ end }}
         </div>
         {{ else }}
         <p class="muted">Les projets arrivent bientôt.</p>
         {{ end }}
-        <p class="work-all"><a href="{{ "projects/" | relLangURL }}">Tout voir →</a></p>
+        <p class="work-all">
+            <a class="work-all-btn" href="{{ "projects/" | relLangURL }}">
+                Tout voir
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+        </p>
     </section>
 
 </div>
@@ -260,30 +267,101 @@ html.dark .p-card.is-designed .p-go:hover { background: #111; color: #fff; }
 .p-card.has-img { transition: box-shadow 0.3s ease; }
 @media (prefers-reduced-motion: reduce) { .p-bg { transition: none; } .p-card.has-img:has(.p-go:hover) .p-bg { transform: none; } }
 
-/* Disposition mobile : cartes empilées, la 1re verticale, les autres horizontales */
-.p-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
-.p-card { aspect-ratio: 16 / 10; }
-.p-card:first-child { aspect-ratio: 4 / 5; }
-
-/* Disposition ordinateur : 1 verticale à gauche, 2 horizontales empilées à droite */
+/* Disposition : 1 grande carte en haut, les petites alignées dessous */
+.pc-deck { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+.pc-card.is-big { grid-column: 1 / -1; aspect-ratio: 4 / 3; }
+.pc-card.is-small { aspect-ratio: 1 / 1; padding: 0; overflow: hidden; }
 @media (min-width: 768px) {
-    .p-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 13rem 13rem; gap: 2rem; }
-    .p-card, .p-card:first-child { aspect-ratio: auto; }
-    .p-card:nth-child(1) { grid-column: 1; grid-row: 1 / span 2; }
-    .p-card:nth-child(2) { grid-column: 2; grid-row: 1; }
-    .p-card:nth-child(3) { grid-column: 2; grid-row: 2; }
-
-    /* Avec 2 projets : deux cartes verticales côte à côte */
-    .p-count-2 .p-card:nth-child(2) { grid-row: 1 / span 2; }
-
-    /* Avec 1 projet : une grande carte pleine largeur */
-    .p-count-1 { grid-template-columns: 1fr; grid-template-rows: 22rem; }
-    .p-count-1 .p-card:nth-child(1) { grid-row: 1; }
+    .pc-deck { gap: 1.25rem; }
+    .pc-card.is-big { aspect-ratio: 2 / 1; }
+    .pc-card.is-small { aspect-ratio: 11 / 10; }
 }
 
-.work-all { margin-top: 1.25rem; text-align: right; font-size: 0.9rem; font-weight: 700; }
-.work-all a { color: var(--muted); }
-.work-all a:hover { color: inherit;}
+/* Grande carte : titre + bouton vers le projet. Petite : seulement le bouton pour l'agrandir */
+.pc-card.is-small .p-name,
+.pc-card.is-small .p-go,
+.pc-card.is-big .pc-grow { display: none; }
+.pc-card.is-small .p-media { position: absolute; inset: 0; }
+
+/* Bouton d'agrandissement : même style que le bouton flèche, en plus petit */
+.pc-grow {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: 0;
+    border-radius: 0.4rem;
+    background: #111;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+html.dark .pc-grow { background: #f5f5f5; color: #111; }
+.pc-grow:hover { background: #fff; color: #111; }
+html.dark .pc-grow:hover { background: #111; color: #fff; }
+.p-card.is-designed .pc-grow,
+html.dark .p-card.is-designed .pc-grow { background: #fff; color: #111; }
+.p-card.is-designed .pc-grow:hover,
+html.dark .p-card.is-designed .pc-grow:hover { background: #111; color: #fff; }
+.pc-grow:focus-visible, .p-go:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.pc-card.is-small:has(.pc-grow:hover) .p-bg { opacity: 1; transform: scale(1.04); }
+
+/* Petites cartes : pas de voile en haut, l'image entière reste visible */
+.pc-card.is-small::before { display: none; }
+
+/* Échange animé : la grande se réduit dans la case de la petite, la petite s'agrandit */
+::view-transition-group(*) { animation-duration: 0.38s; animation-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1); }
+::view-transition-old(*),
+::view-transition-new(*) { height: 100%; object-fit: cover; overflow: clip; }
+/* Pendant l'échange, la bordure est dessinée par le cadre animé et non par l'image capturée :
+   les 4 côtés restent nets et suivent la taille de la carte en même temps */
+.pc-card { view-transition-class: pc; }
+html.pc-anim .pc-card { border-width: 0; box-shadow: none; }
+/* Pas de transition propre à l'image pendant l'échange : elle est directement dans son état final */
+html.pc-anim .pc-card .p-bg { transition: none; }
+::view-transition-group(*.pc) {
+    box-sizing: border-box;
+    border: 1px solid #111;
+    border-radius: 0.6rem;
+    overflow: hidden;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+html.dark::view-transition-group(*.pc) { border-color: #e5e5e5; }
+/* La carte qui grandit affiche directement son état en grand, toujours net.
+   La carte qui rapetisse passe de son état en grand à son état en petit par un fondu court, au milieu du mouvement */
+::view-transition-old(*.pc), ::view-transition-new(*.pc) { animation: none; }
+::view-transition-old(*.grow) { display: none; }
+::view-transition-old(*.shrink) { animation: pc-fade-out 0.38s both; }
+::view-transition-new(*.shrink) { animation: pc-fade-in 0.38s both; }
+@keyframes pc-fade-out { 0%, 15% { opacity: 1; } 55%, 100% { opacity: 0; } }
+@keyframes pc-fade-in { 0%, 15% { opacity: 0; } 55%, 100% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
+
+.work-all { margin-top: 1.5rem; display: flex; justify-content: flex-end; }
+/* Bouton « Tout voir » : même style que les boutons e-mail et LinkedIn */
+.work-all-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 2.5rem;
+    padding: 0 0.9rem;
+    border: 1px solid rgba(75, 85, 99, 0.3);
+    border-radius: 0.45rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: inherit;
+    text-decoration: none;
+}
+.work-all-btn:hover { border-color: currentColor; }
+.work-all-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 </style>
 
 <script>
@@ -309,6 +387,54 @@ html.dark .p-card.is-designed .p-go:hover { background: #111; color: #fff; }
                 setTimeout(end, 2000);
             }
         });
+    });
+})();
+</script>
+<script>
+/* Cartes projets : cliquer sur le bouton d'une petite carte l'agrandit,
+   la grande carte prend sa place en petit */
+(function () {
+    var deck = document.querySelector('[data-deck]');
+    if (!deck) { return; }
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function swap(small) {
+        var big = deck.querySelector('.pc-card.is-big');
+        if (!big || big === small) { return; }
+        /* la petite prend la 1re place (grande), la grande prend la place de la petite */
+        var mark = document.createComment('');
+        small.before(mark);
+        big.before(small);
+        mark.replaceWith(big);
+        big.classList.replace('is-big', 'is-small');
+        small.classList.replace('is-small', 'is-big');
+    }
+
+    deck.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-grow]');
+        if (!btn) { return; }
+        var card = btn.closest('[data-card]');
+        var done = function () {
+            var link = card.querySelector('.p-go');
+            if (link) { link.focus({ preventScroll: true }); }
+        };
+        if (document.startViewTransition && !reduce) {
+            var root = document.documentElement;
+            var big = deck.querySelector('.pc-card.is-big');
+            root.classList.add('pc-anim');
+            big.style.viewTransitionClass = 'pc shrink';
+            card.style.viewTransitionClass = 'pc grow';
+            var end = function () {
+                root.classList.remove('pc-anim');
+                big.style.viewTransitionClass = '';
+                card.style.viewTransitionClass = '';
+                done();
+            };
+            document.startViewTransition(function () { swap(card); }).finished.then(end, end);
+        } else {
+            swap(card);
+            done();
+        }
     });
 })();
 </script>
