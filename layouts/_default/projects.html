@@ -15,10 +15,10 @@
         {{ $thumb := .Params.thumb }}
         {{ $img := $thumb | default .Params.image }}
         {{ $pos := .Params.imagePosition | default "center" }}
-        <article class="p-card{{ if $img }} has-img{{ end }}{{ if $thumb }} is-designed{{ end }} bg-bg-primary-light dark:bg-bg-primary-dark">
+        <article class="p-card{{ if $img }} has-img{{ end }}{{ if $thumb }} is-designed{{ end }}{{ if and $thumb .Params.thumbLight }} is-light{{ end }}{{ if and $thumb .Params.thumbVeil }} has-veil{{ end }} bg-bg-primary-light dark:bg-bg-primary-dark"{{ with and $thumb .Params.thumbVeil }} style="--veil: {{ . }}"{{ end }}>
             <span class="p-name">{{ .Title }}</span>
             {{ with $img }}
-            <img class="p-bg" src="{{ . | relURL }}" alt="" loading="lazy" style="object-position: {{ $pos }}">
+            <img class="p-bg" src="{{ . | relURL }}" alt="" loading="lazy" style="--img-pos: {{ $pos }}">
             {{ else }}
             <span class="p-media"></span>
             {{ end }}
@@ -102,6 +102,7 @@ html.dark .p-go:hover { background: #111; color: #fff; }
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: var(--img-pos, center);
     opacity: 0.82;
     transition: opacity 0.3s ease, transform 0.5s ease;
 }
@@ -129,6 +130,10 @@ html.dark .p-card.is-designed::before { background: none; }
 html.dark .p-card.is-designed .p-go { background: #fff; color: #111; }
 .p-card.is-designed .p-go:hover,
 html.dark .p-card.is-designed .p-go:hover { background: #111; color: #fff; }
+/* Miniature claire (param "thumbLight") : titre foncé, avec un voile facultatif de la couleur du fond (param "thumbVeil", ex. "255, 210, 63") */
+.p-card.is-designed.has-veil::before,
+html.dark .p-card.is-designed.has-veil::before { background: linear-gradient(to bottom, rgba(var(--veil), 0.95) 0, rgba(var(--veil), 0.6) 3.25rem, rgba(var(--veil), 0) 6rem); }
+.p-card.is-designed.is-light .p-name { color: #111; }
 .p-card.is-designed:has(.p-go:hover) { box-shadow: 0 20px 30px -8px rgba(0, 0, 0, 0.3); }
 @media (prefers-reduced-motion: reduce) { .p-bg { transition: none; } .p-card.has-img:has(.p-go:hover) .p-bg { transform: none; } }
 </style>

@@ -56,10 +56,10 @@
             {{ range $i, $p := . }}
             {{ $thumb := .Params.thumb }}
             {{ $img := $thumb | default .Params.image }}
-            <article class="p-card pc-card{{ if eq $i 0 }} is-big{{ else }} is-small{{ end }}{{ if $img }} has-img{{ end }}{{ if $thumb }} is-designed{{ end }} bg-bg-primary-light dark:bg-bg-primary-dark" style="view-transition-name: pc-{{ $i }}" data-card>
+            <article class="p-card pc-card{{ if eq $i 0 }} is-big{{ else }} is-small{{ end }}{{ if $img }} has-img{{ end }}{{ if $thumb }} is-designed{{ end }}{{ if and $thumb .Params.thumbLight }} is-light{{ end }}{{ if and $thumb .Params.thumbVeil }} has-veil{{ end }} bg-bg-primary-light dark:bg-bg-primary-dark"{{ with and $thumb .Params.thumbVeil }} style="--veil: {{ . }}"{{ end }} data-card>
                 <span class="p-name">{{ .Title }}</span>
                 {{ with $img }}
-                <img class="p-bg" src="{{ . | relURL }}" alt="" loading="lazy" style="object-position: {{ $p.Params.imagePosition | default "center" }}">
+                <img class="p-bg" src="{{ . | relURL }}" alt="" loading="lazy" style="--img-pos: {{ $p.Params.imagePosition | default `center` }}">
                 {{ else }}
                 <span class="p-media"></span>
                 {{ end }}
@@ -236,6 +236,7 @@ html.dark .p-go:hover { background: #111; color: #fff; }
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: var(--img-pos, center);
     opacity: 0.82;
     transition: opacity 0.3s ease, transform 0.5s ease;
 }
@@ -263,6 +264,10 @@ html.dark .p-card.is-designed::before { background: none; }
 html.dark .p-card.is-designed .p-go { background: #fff; color: #111; }
 .p-card.is-designed .p-go:hover,
 html.dark .p-card.is-designed .p-go:hover { background: #111; color: #fff; }
+/* Miniature claire (param "thumbLight") : titre foncé, avec un voile facultatif de la couleur du fond (param "thumbVeil", ex. "255, 210, 63") */
+.p-card.is-designed.has-veil::before,
+html.dark .p-card.is-designed.has-veil::before { background: linear-gradient(to bottom, rgba(var(--veil), 0.95) 0, rgba(var(--veil), 0.6) 3.25rem, rgba(var(--veil), 0) 6rem); }
+.p-card.is-designed.is-light .p-name { color: #111; }
 .p-card.is-designed:has(.p-go:hover) { box-shadow: 0 20px 30px -8px rgba(0, 0, 0, 0.3); }
 .p-card.has-img { transition: box-shadow 0.3s ease; }
 @media (prefers-reduced-motion: reduce) { .p-bg { transition: none; } .p-card.has-img:has(.p-go:hover) .p-bg { transform: none; } }
@@ -314,34 +319,41 @@ html.dark .p-card.is-designed .pc-grow:hover { background: #111; color: #fff; }
 /* Petites cartes : pas de voile en haut, l'image entière reste visible */
 .pc-card.is-small::before { display: none; }
 
-/* Échange animé : la grande se réduit dans la case de la petite, la petite s'agrandit */
-::view-transition-group(*) { animation-duration: 0.38s; animation-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1); }
-::view-transition-old(*),
-::view-transition-new(*) { height: 100%; object-fit: cover; overflow: clip; }
-/* Pendant l'échange, la bordure est dessinée par le cadre animé et non par l'image capturée :
-   les 4 côtés restent nets et suivent la taille de la carte en même temps */
-.pc-card { view-transition-class: pc; }
-html.pc-anim .pc-card { border-width: 0; box-shadow: none; }
+/* Échange animé : la grande se réduit dans la case de la petite, la petite s'agrandit.
+   Pendant l'échange, le script nomme les deux cartes concernées « pc-grow » et « pc-shrink ». */
+.pc-card.is-moving { border-width: 0; box-shadow: none; }
 /* Pas de transition propre à l'image pendant l'échange : elle est directement dans son état final */
 html.pc-anim .pc-card .p-bg { transition: none; }
-::view-transition-group(*.pc) {
+/* La bordure est dessinée par le cadre animé et non par l'image capturée :
+   les 4 côtés restent nets et suivent la taille de la carte en même temps */
+::view-transition-group(pc-grow),
+::view-transition-group(pc-shrink) {
+    animation-duration: 0.38s;
+    animation-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
     box-sizing: border-box;
     border: 1px solid #111;
     border-radius: 0.6rem;
     overflow: hidden;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
 }
-html.dark::view-transition-group(*.pc) { border-color: #e5e5e5; }
+html.dark::view-transition-group(pc-grow),
+html.dark::view-transition-group(pc-shrink) { border-color: #e5e5e5; }
+::view-transition-old(pc-grow),
+::view-transition-new(pc-grow),
+::view-transition-old(pc-shrink),
+::view-transition-new(pc-shrink) { height: 100%; object-fit: cover; overflow: clip; animation: none; }
 /* La carte qui grandit affiche directement son état en grand, toujours net.
    La carte qui rapetisse passe de son état en grand à son état en petit par un fondu court, au milieu du mouvement */
-::view-transition-old(*.pc), ::view-transition-new(*.pc) { animation: none; }
-::view-transition-old(*.grow) { display: none; }
-::view-transition-old(*.shrink) { animation: pc-fade-out 0.38s both; }
-::view-transition-new(*.shrink) { animation: pc-fade-in 0.38s both; }
+::view-transition-old(pc-grow) { display: none; }
+::view-transition-old(pc-shrink) { animation: pc-fade-out 0.38s both; }
+::view-transition-new(pc-shrink) { animation: pc-fade-in 0.38s both; }
 @keyframes pc-fade-out { 0%, 15% { opacity: 1; } 55%, 100% { opacity: 0; } }
 @keyframes pc-fade-in { 0%, 15% { opacity: 0; } 55%, 100% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
-    ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+    ::view-transition-group(pc-grow),
+    ::view-transition-group(pc-shrink),
+    ::view-transition-old(pc-shrink),
+    ::view-transition-new(pc-shrink) { animation: none !important; }
 }
 
 .work-all { margin-top: 1.5rem; display: flex; justify-content: flex-end; }
@@ -422,12 +434,16 @@ html.dark::view-transition-group(*.pc) { border-color: #e5e5e5; }
             var root = document.documentElement;
             var big = deck.querySelector('.pc-card.is-big');
             root.classList.add('pc-anim');
-            big.style.viewTransitionClass = 'pc shrink';
-            card.style.viewTransitionClass = 'pc grow';
+            big.style.viewTransitionName = 'pc-shrink';
+            card.style.viewTransitionName = 'pc-grow';
+            big.classList.add('is-moving');
+            card.classList.add('is-moving');
             var end = function () {
                 root.classList.remove('pc-anim');
-                big.style.viewTransitionClass = '';
-                card.style.viewTransitionClass = '';
+                big.style.viewTransitionName = '';
+                card.style.viewTransitionName = '';
+                big.classList.remove('is-moving');
+                card.classList.remove('is-moving');
                 done();
             };
             document.startViewTransition(function () { swap(card); }).finished.then(end, end);
